@@ -182,9 +182,6 @@ class DeleteFile(BaseObsidianTool):
     name: str = "delete_file"
     description = "Delete a markdown file"
 
-    def __init__(self, client: Client):
-        self.client = client
-
     async def run(
         self,
         filename: Annotated[str, Field(description="file path from root")],
@@ -192,6 +189,23 @@ class DeleteFile(BaseObsidianTool):
         result = await self.client.delete_file(filename=filename)
         if result.success:
             return ToolResult(success=True, data=None)
+        else:
+            return ToolResult(success=False, data=result.model_dump_json())
+
+
+class FindFiles(BaseObsidianTool):
+    name: str = "find_files"
+    description = "Find files that contain a specific string"
+
+    async def run(
+        self,
+        search_string: Annotated[str, Field(description="String to search for")],
+        context_length: int = 100,
+    ):
+        result = await self.client.search_simple(query=search_string, context_length=context_length)
+        if result.success:
+            assert result.data is not None
+            return ToolResult(success=True, data=result.data.model_dump_json())
         else:
             return ToolResult(success=False, data=result.model_dump_json())
 
@@ -207,6 +221,7 @@ class ObsidianMCPServer:
         self._register_tools(ReplaceInFile(self.client))
         self._register_tools(AppendToFile(self.client))
         self._register_tools(DeleteFile(self.client))
+        self._register_tools(FindFiles(self.client))
 
     def run(self):
         return self.mcp.run()

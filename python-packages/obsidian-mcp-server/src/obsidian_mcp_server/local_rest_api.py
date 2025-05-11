@@ -36,6 +36,26 @@ class ReadNoteJsonResponse(RootModel[NoteJson]):
     pass
 
 
+class Match(BaseModel):
+    start: int
+    end: int
+
+
+class MatchedResult(BaseModel):
+    match: Match
+    context: str
+
+
+class SearchedFile(BaseModel):
+    filename: str
+    score: float
+    matches: list[MatchedResult]
+
+
+class SearchSimpleResponse(RootModel[list[SearchedFile]]):
+    pass
+
+
 class Result[T: BaseModel](BaseModel):
     success: bool
     url: str | None = None
@@ -259,4 +279,36 @@ class Client:
                 message=message,
             )
         except Exception as e:
+            return _Result(success=False, status_code=None, data=None, error=str(e))
+
+    async def search_simple(self, query: str, context_length: int):
+        endpoint = "/search/simple/"
+        headers = {"accept": "application/json"}
+
+        _Result = Result[SearchSimpleResponse]
+        try:
+            response = await self._request(
+                "POST",
+                endpoint,
+                headers=headers,
+                params={"query": query, "contextLength": context_length},
+            )
+            if response.status == 200:
+                success = True
+                print(response.text)
+                data = SearchSimpleResponse.model_validate_json(response.text)
+                message = None
+            else:
+                success = False
+                data = None
+                message = response.text
+            return _Result(
+                success=success,
+                url=response.url,
+                status_code=response.status,
+                data=data,
+                message=message,
+            )
+        except Exception as e:
+            print(f"Error: {e}")
             return _Result(success=False, status_code=None, data=None, error=str(e))
