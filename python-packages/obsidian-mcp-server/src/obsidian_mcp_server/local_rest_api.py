@@ -295,7 +295,6 @@ class Client:
             )
             if response.status == 200:
                 success = True
-                print(response.text)
                 data = SearchSimpleResponse.model_validate_json(response.text)
                 message = None
             else:
