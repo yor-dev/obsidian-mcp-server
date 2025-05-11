@@ -1,0 +1,23 @@
+[project]
+name = "obsidian-mcp-server"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "yor-dev", email = "52931599+yor-dev@users.noreply.github.com" },
+]
+requires-python = ">=3.12"
+dependencies = [
+    "aiohttp>=3.11.18",
+ "mcp>=1.8.0",
+ "nest-asyncio>=1.6.0",
+ "pydantic>=2.11.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[project.scripts]
+obsidian-mcp-server = "obsidian_mcp_server.__main__:main"
