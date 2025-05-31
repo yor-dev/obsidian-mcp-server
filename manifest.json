@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "yor-mcp-server",
+	"name": "Yor MCP Server",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
-	"isDesktopOnly": false
+	"description": "MCP Server integration for Obsidian - Enable AI assistants to interact with your vault.",
+	"author": "yor-dev",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": true
 }
